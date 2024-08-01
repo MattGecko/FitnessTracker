@@ -17,7 +17,7 @@ struct ContentView: View {
                 .tabItem {
                     Label("Profile", systemImage: "person.fill")
                 }
-   //         MealTrackerView(userSettings: userSettings)  // Pass the same userSettings instance
+            MealTrackerView(userSettings: userSettings)  // Pass the same userSettings instance
                 .tabItem {
                     Label("Meals", systemImage: "list.bullet")
                 }

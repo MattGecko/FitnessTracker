@@ -2,6 +2,8 @@ import SwiftUI
 
 struct MealTrackerView: View {
     
+    @ObservedObject var userSettings: UserSettings
+    
     
     @State private var meals: [Meal] = []
     @State private var name: String = ""
@@ -76,6 +78,6 @@ struct MealTrackerView: View {
 
 struct MealTrackerView_Previews: PreviewProvider {
     static var previews: some View {
-        MealTrackerView()
+        MealTrackerView(userSettings: UserSettings()) // Adjust this for previews
     }
 }
