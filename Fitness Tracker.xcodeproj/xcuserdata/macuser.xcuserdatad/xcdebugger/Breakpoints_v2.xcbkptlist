@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "50B2A083-1072-48AE-98C7-9E6437439F5D"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.SymbolicBreakpoint">
+         <BreakpointContent
+            uuid = "AB14EA04-B059-4975-B2FF-14A2BD941FE8"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            symbolName = "exit"
+            moduleName = "">
+            <Locations>
+               <Location
+                  uuid = "AB14EA04-B059-4975-B2FF-14A2BD941FE8 - 7d83288a14aba3e7"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "+[NSThread exit]"
+                  moduleName = "Foundation"
+                  usesParentBreakpointCondition = "Yes">
+               </Location>
+               <Location
+                  uuid = "AB14EA04-B059-4975-B2FF-14A2BD941FE8 - 6a315ef70d97f9ce"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "dyld4::LibSystemHelpers::exit(int) const"
+                  moduleName = "libdyld.dylib"
+                  usesParentBreakpointCondition = "Yes">
+               </Location>
+               <Location
+                  uuid = "AB14EA04-B059-4975-B2FF-14A2BD941FE8 - 25a1daa434695d6f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "exit"
+                  moduleName = "libsystem_c.dylib"
+                  usesParentBreakpointCondition = "Yes">
+               </Location>
+               <Location
+                  uuid = "AB14EA04-B059-4975-B2FF-14A2BD941FE8 - a584250e1dd0ca40"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CA::WindowServer::FlipBook::exit()"
+                  moduleName = "QuartzCore"
+                  usesParentBreakpointCondition = "Yes">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
