@@ -12,9 +12,9 @@ struct ProfileView: View {
 
     let genders = ["Male", "Female"]
     let weightLossGoals = [
-        "Aggressive": 500,
-        "Moderate": 300,
-        "Slow and Steady": 200
+        "Aggressive": 700,
+        "Moderate": 500,
+        "Slow and Steady": 300
     ]
 
     var body: some View {
@@ -77,9 +77,10 @@ struct ProfileView: View {
 
         if let calculatedBMR = bmr, let deficit = weightLossGoals[weightLossGoal] {
             let finalCalorieTarget = calculatedBMR - Double(deficit)
-            userSettings.calorieTarget = Int(finalCalorieTarget)
+            userSettings.calorieTarget = Int(finalCalorieTarget)  // Set the calorie target in UserSettings
         }
     }
+
 }
 
 struct ProfileView_Previews: PreviewProvider {

@@ -3,8 +3,6 @@ import SwiftUI
 struct MealTrackerView: View {
     
     @ObservedObject var userSettings: UserSettings
-    
-    
     @State private var meals: [Meal] = []
     @State private var name: String = ""
     @State private var mealType: String = "Breakfast"
@@ -19,6 +17,10 @@ struct MealTrackerView: View {
     var body: some View {
         NavigationView {
             Form {
+                Section(header: Text("Your Daily Calorie Goal: \(userSettings.calorieTarget)")) {
+                    Text("Calories Remaining: \(userSettings.calorieTarget - userSettings.caloriesConsumed)")
+                }
+
                 Section(header: Text("Meal Details")) {
                     TextField("Meal Name", text: $name)
                     
@@ -61,7 +63,9 @@ struct MealTrackerView: View {
             carbohydrates: Double(carbohydrates) ?? 0.0,
             date: date
         )
+        
         meals.append(newMeal)
+        userSettings.caloriesConsumed += newMeal.calories // Update calories consumed
         clearForm()
     }
 
@@ -78,6 +82,6 @@ struct MealTrackerView: View {
 
 struct MealTrackerView_Previews: PreviewProvider {
     static var previews: some View {
-        MealTrackerView(userSettings: UserSettings()) // Adjust this for previews
+        MealTrackerView(userSettings: UserSettings())
     }
 }
