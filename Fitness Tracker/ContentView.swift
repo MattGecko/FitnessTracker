@@ -1,5 +1,15 @@
 import SwiftUI
 
+@main
+struct FitnessTrackerApp: App { // Replace 'YourApp' with the actual name of your app
+    var body: some Scene {
+        WindowGroup {
+            ContentView() // This is where your ContentView is set as the root view
+        }
+    }
+}
+
+
 struct ContentView: View {
     @StateObject var userSettings = UserSettings()
 

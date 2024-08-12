@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		636331D42C555AF900C8989C /* Fitness_TrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636331D32C555AF900C8989C /* Fitness_TrackerApp.swift */; };
 		636331D62C555AF900C8989C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636331D52C555AF900C8989C /* ContentView.swift */; };
 		636331D82C555AFD00C8989C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 636331D72C555AFD00C8989C /* Assets.xcassets */; };
 		636331DB2C555AFD00C8989C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 636331DA2C555AFD00C8989C /* Preview Assets.xcassets */; };
@@ -40,7 +39,6 @@
 
 /* Begin PBXFileReference section */
 		636331D02C555AF900C8989C /* Fitness Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fitness Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		636331D32C555AF900C8989C /* Fitness_TrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fitness_TrackerApp.swift; sourceTree = "<group>"; };
 		636331D52C555AF900C8989C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		636331D72C555AFD00C8989C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		636331DA2C555AFD00C8989C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -104,7 +102,6 @@
 		636331D22C555AF900C8989C /* Fitness Tracker */ = {
 			isa = PBXGroup;
 			children = (
-				636331D32C555AF900C8989C /* Fitness_TrackerApp.swift */,
 				636331D52C555AF900C8989C /* ContentView.swift */,
 				636332052C5A98C900C8989C /* UserSettings.swift */,
 				636332032C555F7600C8989C /* ProfileView.swift */,
@@ -278,7 +275,6 @@
 				636331D62C555AF900C8989C /* ContentView.swift in Sources */,
 				636332062C5A98CA00C8989C /* UserSettings.swift in Sources */,
 				636332042C555F7600C8989C /* ProfileView.swift in Sources */,
-				636331D42C555AF900C8989C /* Fitness_TrackerApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
