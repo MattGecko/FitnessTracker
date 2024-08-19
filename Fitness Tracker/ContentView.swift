@@ -23,6 +23,10 @@ struct ContentView: View {
                 .tabItem {
                     Label("Meals", systemImage: "list.bullet")
                 }
+            FoodLogView(userSettings: userSettings)
+                    .tabItem {
+                        Label("Food Log", systemImage: "calendar")
+                    }
         }
         .onAppear {
             checkAndInitializeData()
