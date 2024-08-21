@@ -21,7 +21,7 @@ struct ContentView: View {
                 }
             MealTrackerView(userSettings: userSettings)
                 .tabItem {
-                    Label("Meals", systemImage: "list.bullet")
+                    Label("Meals", systemImage: "fork.knife")
                 }
             FoodLogView(userSettings: userSettings)
                     .tabItem {

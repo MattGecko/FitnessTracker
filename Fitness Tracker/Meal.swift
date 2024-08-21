@@ -1,6 +1,6 @@
 import Foundation
 
-struct FoodMeal: Identifiable {
+struct FoodMeal: Identifiable, Codable {
     let id = UUID() // Unique ID for each meal
     let name: String
     let mealType: String

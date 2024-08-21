@@ -1,9 +1,7 @@
 import SwiftUI
 
 struct MealTrackerView: View {
-    
     @ObservedObject var userSettings: UserSettings
-    @State private var meals: [FoodMeal] = []  // Updated to FoodMeal
     @State private var name: String = ""
     @State private var mealType: String = "Breakfast"
     @State private var calories: String = ""
@@ -54,7 +52,7 @@ struct MealTrackerView: View {
     }
 
     private func addMeal() {
-        let newMeal = FoodMeal(  // Updated to FoodMeal
+        let newMeal = FoodMeal(
             name: name,
             mealType: mealType,
             calories: Int(calories) ?? 0,
@@ -64,8 +62,10 @@ struct MealTrackerView: View {
             date: date
         )
         
-        meals.append(newMeal)
-        userSettings.caloriesConsumed += newMeal.calories // Update calories consumed
+        // Save the meal to UserSettings
+        userSettings.meals.append(newMeal)
+        userSettings.caloriesConsumed += newMeal.calories
+        
         clearForm()
     }
 
