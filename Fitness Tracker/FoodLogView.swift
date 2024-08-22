@@ -19,6 +19,9 @@ struct FoodLogView: View {
                                 ForEach(mealsForSelectedDate[mealType] ?? []) { meal in
                                     MealRowView(meal: meal, mealType: mealType)
                                 }
+                                .onDelete { indexSet in
+                                    deleteMeal(at: indexSet, in: mealType, from: mealsForSelectedDate[mealType] ?? [])
+                                }
                             }
                         }
                     }
@@ -49,6 +52,17 @@ struct FoodLogView: View {
         // Group the filtered meals by meal type
         let groupedMeals = Dictionary(grouping: mealsForDate, by: { $0.mealType })
         return groupedMeals.isEmpty ? nil : groupedMeals
+    }
+
+    // Delete the meal from the list and UserSettings
+    private func deleteMeal(at offsets: IndexSet, in mealType: String, from meals: [FoodMeal]) {
+        let mealsToDelete = offsets.map { meals[$0] }
+        
+        for meal in mealsToDelete {
+            if let index = userSettings.meals.firstIndex(where: { $0.id == meal.id }) {
+                userSettings.meals.remove(at: index)
+            }
+        }
     }
 }
 

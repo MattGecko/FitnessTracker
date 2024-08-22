@@ -7,6 +7,7 @@ struct ProfileView: View {
     @State private var gender: String = "Male"
     @State private var weightLossGoal: String = "Moderate"
     @State private var bmr: Double?
+    @State private var showAlert: Bool = false // State to manage alert display
 
     @ObservedObject var userSettings: UserSettings
 
@@ -56,6 +57,11 @@ struct ProfileView: View {
                 }
             }
             .navigationTitle("Profile")
+            .alert(isPresented: $showAlert) {
+                Alert(title: Text("Calorie Target Warning"),
+                      message: Text("Your calculated calorie target is below 1200 kcal/day, which may not be sufficient for most adults. Please consult with a healthcare provider."),
+                      dismissButton: .default(Text("OK")))
+            }
         }
     }
 
@@ -65,22 +71,32 @@ struct ProfileView: View {
         }
         
         let isMale = gender == "Male"
-        let weightComponent = 13.397 * weightNum
-        let heightComponent = 4.799 * heightNum
-        let ageComponent = 5.677 * Double(ageNum)
+        
+        let weightComponent: Double
+        let heightComponent: Double
+        let ageComponent: Double
         
         if isMale {
+            weightComponent = 13.397 * weightNum
+            heightComponent = 4.799 * heightNum
+            ageComponent = 5.677 * Double(ageNum)
             bmr = 88.362 + weightComponent + heightComponent - ageComponent
         } else {
+            weightComponent = 9.247 * weightNum
+            heightComponent = 3.098 * heightNum
+            ageComponent = 4.330 * Double(ageNum)
             bmr = 447.593 + weightComponent + heightComponent - ageComponent
         }
 
         if let calculatedBMR = bmr, let deficit = weightLossGoals[weightLossGoal] {
             let finalCalorieTarget = calculatedBMR - Double(deficit)
             userSettings.calorieTarget = Int(finalCalorieTarget)  // Set the calorie target in UserSettings
+            
+            if finalCalorieTarget < 1200 {
+                showAlert = true  // Trigger alert if calorie target is below 1200
+            }
         }
     }
-
 }
 
 struct ProfileView_Previews: PreviewProvider {
