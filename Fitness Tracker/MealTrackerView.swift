@@ -1,4 +1,5 @@
 import SwiftUI
+import Combine
 
 struct MealTrackerView: View {
     @ObservedObject var userSettings: UserSettings
@@ -9,8 +10,9 @@ struct MealTrackerView: View {
     @State private var protein: String = ""
     @State private var carbohydrates: String = ""
     @State private var date: Date = Date()
-    @State private var searchResults: [FoodItem] = [] // Store search results
-    @State private var isSearching = false // Track if searching
+    @State private var searchResults: [FoodItem] = []
+    @State private var isSearching = false
+    @State private var cancellable: AnyCancellable?
 
     let mealTypes = ["Breakfast", "Lunch", "Dinner", "Snack"]
     private let foodSearchService = FoodSearchService()
@@ -24,13 +26,12 @@ struct MealTrackerView: View {
 
                 Section(header: Text("Meal Details")) {
                     VStack {
-                        TextField("Meal Name", text: $name, onEditingChanged: { isEditing in
-                            if isEditing {
-                                search()
+                        TextField("Meal Name", text: $name)
+                            .onChange(of: name) { newValue in
+                                performSearch(query: newValue)
                             }
-                        })
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .padding(.bottom, isSearching ? 0 : 10)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding(.bottom, isSearching ? 0 : 10)
                         
                         if isSearching && !searchResults.isEmpty {
                             List(searchResults) { food in
@@ -78,19 +79,38 @@ struct MealTrackerView: View {
         }
     }
 
-    private func search() {
-        isSearching = true
-        foodSearchService.searchFood(query: name) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let foods):
-                    searchResults = foods
-                case .failure(let error):
-                    print("Error searching for food: \(error)")
-                    searchResults = []
-                }
-            }
+    // Replace this function with the new code
+    private func performSearch(query: String) {
+        if query.isEmpty || query.count < 2 {
+            isSearching = false
+            searchResults = []
+            return
         }
+        
+        isSearching = true
+
+        // Debugging: print the query being searched
+        print("Searching for: \(query)")
+
+        // Debounce search queries to avoid flooding the API with requests
+        cancellable?.cancel()
+        cancellable = Just(query)
+            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
+            .sink(receiveValue: { debouncedQuery in
+                print("Debounced search for: \(debouncedQuery)")
+                self.foodSearchService.searchFood(query: debouncedQuery) { result in
+                    DispatchQueue.main.async {
+                        switch result {
+                        case .success(let foods):
+                            self.searchResults = foods
+                            print("Search results: \(foods.count) items found")
+                        case .failure(let error):
+                            print("Error searching for food: \(error)")
+                            self.searchResults = []
+                        }
+                    }
+                }
+            })
     }
 
     private func selectFood(_ food: FoodItem) {
@@ -132,11 +152,5 @@ struct MealTrackerView: View {
         date = Date()
         searchResults = []
         isSearching = false
-    }
-}
-
-struct MealTrackerView_Previews: PreviewProvider {
-    static var previews: some View {
-        MealTrackerView(userSettings: UserSettings())
     }
 }

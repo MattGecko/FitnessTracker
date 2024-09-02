@@ -47,8 +47,14 @@ class FoodSearchService {
                     let protein = food.foodNutrients.first(where: { $0.nutrientName == "Protein" })?.value ?? 0
                     let carbohydrates = food.foodNutrients.first(where: { $0.nutrientName == "Carbohydrate, by difference" })?.value ?? 0
                     
+                    // Ensure values are not NaN by checking and setting defaults if necessary
+                    let safeCalories = calories.isNaN ? 0 : calories
+                    let safeFat = fat.isNaN ? 0 : fat
+                    let safeProtein = protein.isNaN ? 0 : protein
+                    let safeCarbohydrates = carbohydrates.isNaN ? 0 : carbohydrates
+                    
                     // Create a FoodItem instance with the extracted data
-                    return FoodItem(description: food.description, calories: calories, fat: fat, protein: protein, carbohydrates: carbohydrates)
+                    return FoodItem(description: food.description, calories: safeCalories, fat: safeFat, protein: safeProtein, carbohydrates: safeCarbohydrates)
                 }
                 // Return the array of FoodItem objects
                 completion(.success(foodItems))
