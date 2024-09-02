@@ -3,14 +3,48 @@ import SwiftUI
 struct FoodLogView: View {
     @ObservedObject var userSettings: UserSettings
     @State private var selectedDate: Date = Date() // State property to hold the selected date
+    @State private var showDatePicker: Bool = false // State to show/hide the DatePicker
     
     var body: some View {
         NavigationView {
             VStack {
-                // DatePicker for selecting the date
-                DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
-                    .datePickerStyle(GraphicalDatePickerStyle()) // or .compactDatePickerStyle() for a more compact view
-                    .padding()
+                HStack {
+                    Button(action: {
+                        // Move to the previous day
+                        selectedDate = Calendar.current.date(byAdding: .day, value: -1, to: selectedDate) ?? selectedDate
+                    }) {
+                        Image(systemName: "chevron.left")
+                            .padding()
+                    }
+                    
+                    Button(action: {
+                        // Show the full date picker
+                        showDatePicker.toggle()
+                    }) {
+                        Text(formattedDate(selectedDate))
+                            .font(.headline)
+                            .padding()
+                    }
+                    .sheet(isPresented: $showDatePicker) {
+                        VStack {
+                            DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
+                                .datePickerStyle(GraphicalDatePickerStyle())
+                                .padding()
+                            Button("Done") {
+                                showDatePicker = false
+                            }
+                            .padding()
+                        }
+                    }
+                    
+                    Button(action: {
+                        // Move to the next day
+                        selectedDate = Calendar.current.date(byAdding: .day, value: 1, to: selectedDate) ?? selectedDate
+                    }) {
+                        Image(systemName: "chevron.right")
+                            .padding()
+                    }
+                }
                 
                 if let mealsForSelectedDate = mealsForSelectedDate(), !mealsForSelectedDate.isEmpty {
                     List {
@@ -37,6 +71,13 @@ struct FoodLogView: View {
             }
             .navigationTitle("Food Log")
         }
+    }
+
+    // Format the selected date for display
+    private func formattedDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        return formatter.string(from: date)
     }
 
     // Filter the meals for the selected date and group by meal type

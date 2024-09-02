@@ -20,6 +20,7 @@
 		636332062C5A98CA00C8989C /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636332052C5A98C900C8989C /* UserSettings.swift */; };
 		63B9D0E42C6DD63400E4A482 /* FoodLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9D0E32C6DD63400E4A482 /* FoodLogView.swift */; };
 		63B9D0E62C6DD89000E4A482 /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9D0E52C6DD89000E4A482 /* Meal.swift */; };
+		63B9D0E82C8597E100E4A482 /* FoodSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9D0E72C8597E000E4A482 /* FoodSearchService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		636332052C5A98C900C8989C /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		63B9D0E32C6DD63400E4A482 /* FoodLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLogView.swift; sourceTree = "<group>"; };
 		63B9D0E52C6DD89000E4A482 /* Meal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meal.swift; sourceTree = "<group>"; };
+		63B9D0E72C8597E000E4A482 /* FoodSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodSearchService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +118,7 @@
 				636331FF2C555BFB00C8989C /* DataManager.swift */,
 				636331D72C555AFD00C8989C /* Assets.xcassets */,
 				636331D92C555AFD00C8989C /* Preview Content */,
+				63B9D0E72C8597E000E4A482 /* FoodSearchService.swift */,
 			);
 			path = "Fitness Tracker";
 			sourceTree = "<group>";
@@ -276,6 +279,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				636332022C555E3A00C8989C /* MealTrackerView.swift in Sources */,
+				63B9D0E82C8597E100E4A482 /* FoodSearchService.swift in Sources */,
 				63B9D0E42C6DD63400E4A482 /* FoodLogView.swift in Sources */,
 				636331FE2C555BD300C8989C /* Models.swift in Sources */,
 				636332002C555BFB00C8989C /* DataManager.swift in Sources */,
@@ -446,7 +450,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Fitness Tracker/Preview Content\"";
-				DEVELOPMENT_TEAM = 9HK9UQ5H9F;
+				DEVELOPMENT_TEAM = F8QCHMXDDT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -475,7 +479,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Fitness Tracker/Preview Content\"";
-				DEVELOPMENT_TEAM = 9HK9UQ5H9F;
+				DEVELOPMENT_TEAM = F8QCHMXDDT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
