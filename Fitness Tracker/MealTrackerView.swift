@@ -12,6 +12,7 @@ struct MealTrackerView: View {
     @State private var date: Date = Date()
     @State private var searchResults: [FoodItem] = []
     @State private var isSearching = false
+    @State private var isLoading = false  // New state to handle loading state
     @State private var cancellable: AnyCancellable?
 
     let mealTypes = ["Breakfast", "Lunch", "Dinner", "Snack"]
@@ -33,6 +34,12 @@ struct MealTrackerView: View {
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .padding(.bottom, isSearching ? 0 : 10)
                         
+                        // Show loading indicator if search is in progress
+                        if isLoading {
+                            ProgressView("Searching...")
+                        }
+
+                        // Show search results if available
                         if isSearching && !searchResults.isEmpty {
                             List(searchResults) { food in
                                 Button(action: {
@@ -47,6 +54,10 @@ struct MealTrackerView: View {
                                 }
                             }
                             .frame(height: 200) // Adjust the height of the results list
+                        } else if isSearching && searchResults.isEmpty && !isLoading {
+                            // Show "No results found" message
+                            Text("No results found.")
+                                .foregroundColor(.gray)
                         }
                     }
                     
@@ -58,7 +69,7 @@ struct MealTrackerView: View {
                     .pickerStyle(SegmentedPickerStyle())
 
                     TextField("Calories", text: $calories)
-                        .keyboardType(.numberPad)
+                        .keyboardType(.decimalPad)
                     TextField("Fat (grams)", text: $fat)
                         .keyboardType(.decimalPad)
                     TextField("Protein (grams)", text: $protein)
@@ -79,27 +90,29 @@ struct MealTrackerView: View {
         }
     }
 
-    // Replace this function with the new code
     private func performSearch(query: String) {
+        // Clear results and reset state if the query is too short
         if query.isEmpty || query.count < 2 {
             isSearching = false
             searchResults = []
+            isLoading = false
             return
         }
         
+        // Start the search process
         isSearching = true
+        isLoading = true  // Show loading indicator
 
-        // Debugging: print the query being searched
         print("Searching for: \(query)")
 
-        // Debounce search queries to avoid flooding the API with requests
         cancellable?.cancel()
         cancellable = Just(query)
-            .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
+            .debounce(for: .milliseconds(500), scheduler: RunLoop.main) // Increased debounce time
             .sink(receiveValue: { debouncedQuery in
                 print("Debounced search for: \(debouncedQuery)")
                 self.foodSearchService.searchFood(query: debouncedQuery) { result in
                     DispatchQueue.main.async {
+                        isLoading = false  // Stop loading once the search completes
                         switch result {
                         case .success(let foods):
                             self.searchResults = foods
