@@ -12,11 +12,12 @@ struct MealTrackerView: View {
     @State private var date: Date = Date()
     @State private var searchResults: [FoodItem] = []
     @State private var isSearching = false
-    @State private var isLoading = false  // New state to handle loading state
+    @State private var isLoading = false
+    @State private var pageNumber = 1 // Track the current page number
     @State private var cancellable: AnyCancellable?
+    private let foodSearchService = FoodSearchService()
 
     let mealTypes = ["Breakfast", "Lunch", "Dinner", "Snack"]
-    private let foodSearchService = FoodSearchService()
 
     var body: some View {
         NavigationView {
@@ -29,6 +30,7 @@ struct MealTrackerView: View {
                     VStack {
                         TextField("Meal Name", text: $name)
                             .onChange(of: name) { newValue in
+                                resetSearch()
                                 performSearch(query: newValue)
                             }
                             .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -39,23 +41,36 @@ struct MealTrackerView: View {
                             ProgressView("Searching...")
                         }
 
-                        // Show search results if available
+                        // Show search results in a scrollable list
                         if isSearching && !searchResults.isEmpty {
-                            List(searchResults) { food in
-                                Button(action: {
-                                    selectFood(food)
-                                }) {
-                                    VStack(alignment: .leading) {
-                                        Text(food.description)
-                                            .font(.headline)
-                                        Text("\(food.calories, specifier: "%.0f") kcal")
-                                            .font(.subheadline)
+                            ScrollView {
+                                LazyVStack {
+                                    ForEach(searchResults) { food in
+                                        Button(action: {
+                                            selectFood(food)
+                                        }) {
+                                            VStack(alignment: .leading) {
+                                                Text(food.description)
+                                                    .font(.headline)
+                                                Text("\(food.calories, specifier: "%.0f") kcal")
+                                                    .font(.subheadline)
+                                            }
+                                            .padding()
+                                            .background(Color.gray.opacity(0.1))
+                                            .cornerRadius(8)
+                                        }
+                                    }
+
+                                    // Load more when reaching the end of the list
+                                    if !isLoading {
+                                        Button("Load more results...") {
+                                            loadMoreResults(query: name)
+                                        }
                                     }
                                 }
                             }
-                            .frame(height: 200) // Adjust the height of the results list
+                            .frame(height: 200) // Adjust the height of the scrollable list
                         } else if isSearching && searchResults.isEmpty && !isLoading {
-                            // Show "No results found" message
                             Text("No results found.")
                                 .foregroundColor(.gray)
                         }
@@ -90,6 +105,13 @@ struct MealTrackerView: View {
         }
     }
 
+    // Function to reset the search results and page number when a new search begins
+    private func resetSearch() {
+        pageNumber = 1
+        searchResults = []
+    }
+
+    // Perform search and load results
     private func performSearch(query: String) {
         // Clear results and reset state if the query is too short
         if query.isEmpty || query.count < 2 {
@@ -98,36 +120,39 @@ struct MealTrackerView: View {
             isLoading = false
             return
         }
-        
-        // Start the search process
+
         isSearching = true
-        isLoading = true  // Show loading indicator
-
-        print("Searching for: \(query)")
-
+        isLoading = true
         cancellable?.cancel()
         cancellable = Just(query)
-            .debounce(for: .milliseconds(500), scheduler: RunLoop.main) // Increased debounce time
+            .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
             .sink(receiveValue: { debouncedQuery in
-                print("Debounced search for: \(debouncedQuery)")
-                self.foodSearchService.searchFood(query: debouncedQuery) { result in
+                print("Searching for: \(debouncedQuery)")
+                self.foodSearchService.searchFood(query: debouncedQuery, pageNumber: self.pageNumber) { result in
                     DispatchQueue.main.async {
-                        isLoading = false  // Stop loading once the search completes
+                        self.isLoading = false
                         switch result {
                         case .success(let foods):
-                            self.searchResults = foods
-                            print("Search results: \(foods.count) items found")
+                            self.searchResults.append(contentsOf: foods)
+                            if foods.isEmpty {
+                                print("No more results")
+                            }
                         case .failure(let error):
-                            print("Error searching for food: \(error)")
-                            self.searchResults = []
+                            print("Error searching for food: \(error.localizedDescription)")
                         }
                     }
                 }
             })
     }
 
+    // Load more results when the user scrolls to the bottom
+    private func loadMoreResults(query: String) {
+        pageNumber += 1
+        performSearch(query: query)
+    }
+
+    // Select the food and autofill the nutritional info
     private func selectFood(_ food: FoodItem) {
-        // Autofill the nutritional information
         name = food.description
         calories = String(Int(food.calories))
         fat = String(food.fat)
@@ -137,6 +162,7 @@ struct MealTrackerView: View {
         isSearching = false
     }
 
+    // Add meal to user settings
     private func addMeal() {
         let newMeal = FoodMeal(
             name: name,
@@ -155,6 +181,7 @@ struct MealTrackerView: View {
         clearForm()
     }
 
+    // Clear form after adding a meal
     private func clearForm() {
         name = ""
         mealType = "Breakfast"
