@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct FitnessTrackerApp: App { // Replace 'YourApp' with the actual name of your app
+struct FitnessTrackerApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView() // This is where your ContentView is set as the root view

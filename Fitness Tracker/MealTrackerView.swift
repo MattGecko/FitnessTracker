@@ -35,13 +35,11 @@ struct MealTrackerView: View {
                             }
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .padding(.bottom, isSearching ? 0 : 10)
-                        
-                        // Show loading indicator if search is in progress
+
                         if isLoading {
                             ProgressView("Searching...")
                         }
 
-                        // Show search results in a scrollable list
                         if isSearching && !searchResults.isEmpty {
                             ScrollView {
                                 LazyVStack {
@@ -52,7 +50,8 @@ struct MealTrackerView: View {
                                             VStack(alignment: .leading) {
                                                 Text(food.description)
                                                     .font(.headline)
-                                                Text("\(food.calories, specifier: "%.0f") kcal")
+                                                // Ensure valid numeric values are displayed
+                                                Text("\(max(0, food.calories), specifier: "%.0f") kcal")
                                                     .font(.subheadline)
                                             }
                                             .padding()
@@ -61,7 +60,6 @@ struct MealTrackerView: View {
                                         }
                                     }
 
-                                    // Load more when reaching the end of the list
                                     if !isLoading {
                                         Button("Load more results...") {
                                             loadMoreResults(query: name)
@@ -69,13 +67,13 @@ struct MealTrackerView: View {
                                     }
                                 }
                             }
-                            .frame(height: 200) // Adjust the height of the scrollable list
+                            .frame(height: 200)
                         } else if isSearching && searchResults.isEmpty && !isLoading {
                             Text("No results found.")
                                 .foregroundColor(.gray)
                         }
                     }
-                    
+
                     Picker("Meal Type", selection: $mealType) {
                         ForEach(mealTypes, id: \.self) { type in
                             Text(type)
@@ -118,27 +116,36 @@ struct MealTrackerView: View {
             isSearching = false
             searchResults = []
             isLoading = false
+            print("Query too short, stopping search.")
             return
         }
 
+        // Start the search process
         isSearching = true
-        isLoading = true
+        isLoading = true  // Show loading indicator
+        print("Searching for: \(query)")
+
         cancellable?.cancel()
         cancellable = Just(query)
             .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
             .sink(receiveValue: { debouncedQuery in
-                print("Searching for: \(debouncedQuery)")
+                print("Debounced search for: \(debouncedQuery)")
                 self.foodSearchService.searchFood(query: debouncedQuery, pageNumber: self.pageNumber) { result in
                     DispatchQueue.main.async {
-                        self.isLoading = false
+                        self.isLoading = false  // Stop loading once the search completes
                         switch result {
                         case .success(let foods):
-                            self.searchResults.append(contentsOf: foods)
-                            if foods.isEmpty {
-                                print("No more results")
+                            print("Search results found: \(foods.count) items")
+                            if foods.isEmpty && self.pageNumber == 1 {
+                                self.isSearching = false
+                                self.searchResults = []
+                            } else {
+                                self.searchResults.append(contentsOf: foods) // Append the results for pagination
                             }
                         case .failure(let error):
                             print("Error searching for food: \(error.localizedDescription)")
+                            self.isSearching = false  // Reset isSearching on failure
+                            self.searchResults = []
                         }
                     }
                 }
@@ -173,11 +180,11 @@ struct MealTrackerView: View {
             carbohydrates: Double(carbohydrates) ?? 0.0,
             date: date
         )
-        
+
         // Save the meal to UserSettings
         userSettings.meals.append(newMeal)
         userSettings.caloriesConsumed += newMeal.calories
-        
+
         clearForm()
     }
 

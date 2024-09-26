@@ -13,20 +13,20 @@ struct FoodItem: Identifiable, Codable {
     init(description: String, calories: Double, fat: Double, protein: Double, carbohydrates: Double) {
         self.id = UUID()
         self.description = description
-        self.calories = calories
-        self.fat = fat
-        self.protein = protein
-        self.carbohydrates = carbohydrates
+        self.calories = max(0, calories) // Ensure no NaN or negative values
+        self.fat = max(0, fat)           // Ensure no NaN or negative values
+        self.protein = max(0, protein)   // Ensure no NaN or negative values
+        self.carbohydrates = max(0, carbohydrates) // Ensure no NaN or negative values
     }
 }
 
 // Define the FoodSearchService class
 class FoodSearchService {
-    private let apiKey = "XKjTiHR6d4oXxzTwbhge0ZwLCf0L220GBeW39ph3" // Your USDA API Key
+    private let apiKey = "SNb2kzUcguzzrbrHlvSEXAWIouqvXAKsWmQ4TsFg" // Replace with your USDA API Key
     private let baseURL = "https://api.nal.usda.gov/fdc/v1/foods/search"
-    private let pageSize = 50 // Limit the number of results to 50 per page
+    private let pageSize = 1 // Adjust as necessary
 
-    // Function to search for food using the USDA API with pagination support
+    // Function to search for food using the USDA API
     func searchFood(query: String, pageNumber: Int = 1, completion: @escaping (Result<[FoodItem], Error>) -> Void) {
         // Percent-encode the query to handle spaces and special characters
         guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
@@ -51,13 +51,6 @@ class FoodSearchService {
             if let httpResponse = response as? HTTPURLResponse {
                 guard (200...299).contains(httpResponse.statusCode) else {
                     print("HTTP Error: Status code \(httpResponse.statusCode)")
-                    if httpResponse.statusCode == 401 {
-                        print("Unauthorized: Invalid API key")
-                    } else if httpResponse.statusCode == 429 {
-                        print("Rate-limited: Too many requests")
-                    } else if httpResponse.statusCode == 500 {
-                        print("Server error: Try again later")
-                    }
                     completion(.failure(NSError(domain: "HTTP Error", code: httpResponse.statusCode, userInfo: nil)))
                     return
                 }
@@ -82,14 +75,14 @@ class FoodSearchService {
                     let protein = food.foodNutrients.first(where: { $0.nutrientName == "Protein" })?.value ?? 0
                     let carbohydrates = food.foodNutrients.first(where: { $0.nutrientName == "Carbohydrate, by difference" })?.value ?? 0
 
-                    // Ensure values are not NaN by checking and setting defaults
-                    let safeCalories = calories.isNaN ? 0 : calories
-                    let safeFat = fat.isNaN ? 0 : fat
-                    let safeProtein = protein.isNaN ? 0 : protein
-                    let safeCarbohydrates = carbohydrates.isNaN ? 0 : carbohydrates
-
-                    // Create a FoodItem instance
-                    return FoodItem(description: food.description, calories: safeCalories, fat: safeFat, protein: safeProtein, carbohydrates: safeCarbohydrates)
+                    // Ensure values are not NaN or negative by using max(0, value)
+                    return FoodItem(
+                        description: food.description,
+                        calories: max(0, calories),
+                        fat: max(0, fat),
+                        protein: max(0, protein),
+                        carbohydrates: max(0, carbohydrates)
+                    )
                 }
                 print("Food items found: \(foodItems.count)") // Debug: Print number of food items found
                 completion(.success(foodItems))
