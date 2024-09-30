@@ -15,8 +15,9 @@ struct MealTrackerView: View {
     @State private var isLoading = false
     @State private var pageNumber = 1 // Track the current page number
     @State private var cancellable: AnyCancellable?
-    private let foodSearchService = FoodSearchService()
+    @State private var searchTimer: Timer?  // Timer to handle search debounce
 
+    private let foodSearchService = FoodSearchService()
     let mealTypes = ["Breakfast", "Lunch", "Dinner", "Snack"]
 
     var body: some View {
@@ -31,7 +32,7 @@ struct MealTrackerView: View {
                         TextField("Meal Name", text: $name)
                             .onChange(of: name) { newValue in
                                 resetSearch()
-                                performSearch(query: newValue)
+                                scheduleSearch(query: newValue)
                             }
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .padding(.bottom, isSearching ? 0 : 10)
@@ -50,7 +51,6 @@ struct MealTrackerView: View {
                                             VStack(alignment: .leading) {
                                                 Text(food.description)
                                                     .font(.headline)
-                                                // Ensure valid numeric values are displayed
                                                 Text("\(max(0, food.calories), specifier: "%.0f") kcal")
                                                     .font(.subheadline)
                                             }
@@ -107,49 +107,53 @@ struct MealTrackerView: View {
     private func resetSearch() {
         pageNumber = 1
         searchResults = []
+        searchTimer?.invalidate() // Invalidate the timer when the search changes
+    }
+
+    // Schedule the search using a timer (2-second delay after typing stops)
+    private func scheduleSearch(query: String) {
+        searchTimer?.invalidate()  // Invalidate the timer on each keystroke
+        guard query.count >= 3 else {
+            print("Query too short, stopping search.")
+            isSearching = false
+            isLoading = false
+            searchResults = []
+            return
+        }
+
+        searchTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { _ in
+            self.performSearch(query: query)
+        }
     }
 
     // Perform search and load results
     private func performSearch(query: String) {
-        // Clear results and reset state if the query is too short
-        if query.isEmpty || query.count < 2 {
-            isSearching = false
-            searchResults = []
-            isLoading = false
-            print("Query too short, stopping search.")
-            return
-        }
+        print("User stopped typing. Proceeding with search for: \(query)")
 
-        // Start the search process
         isSearching = true
         isLoading = true  // Show loading indicator
-        print("Searching for: \(query)")
 
-        cancellable?.cancel()
-        cancellable = Just(query)
-            .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
-            .sink(receiveValue: { debouncedQuery in
-                print("Debounced search for: \(debouncedQuery)")
-                self.foodSearchService.searchFood(query: debouncedQuery, pageNumber: self.pageNumber) { result in
-                    DispatchQueue.main.async {
-                        self.isLoading = false  // Stop loading once the search completes
-                        switch result {
-                        case .success(let foods):
-                            print("Search results found: \(foods.count) items")
-                            if foods.isEmpty && self.pageNumber == 1 {
-                                self.isSearching = false
-                                self.searchResults = []
-                            } else {
-                                self.searchResults.append(contentsOf: foods) // Append the results for pagination
-                            }
-                        case .failure(let error):
-                            print("Error searching for food: \(error.localizedDescription)")
-                            self.isSearching = false  // Reset isSearching on failure
-                            self.searchResults = []
-                        }
+        cancellable?.cancel()  // Cancel any ongoing search
+
+        self.foodSearchService.searchFood(query: query, pageNumber: self.pageNumber) { result in
+            DispatchQueue.main.async {
+                self.isLoading = false  // Stop loading once the search completes
+                switch result {
+                case .success(let foods):
+                    print("Search results found: \(foods.count) items")
+                    if foods.isEmpty && self.pageNumber == 1 {
+                        self.isSearching = false
+                        self.searchResults = []
+                    } else {
+                        self.searchResults.append(contentsOf: foods) // Append the results for pagination
                     }
+                case .failure(let error):
+                    print("Error searching for food: \(error.localizedDescription)")
+                    self.isSearching = false  // Reset isSearching on failure
+                    self.searchResults = []
                 }
-            })
+            }
+        }
     }
 
     // Load more results when the user scrolls to the bottom
