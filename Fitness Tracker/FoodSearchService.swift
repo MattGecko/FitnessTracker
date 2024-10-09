@@ -24,7 +24,7 @@ struct FoodItem: Identifiable, Codable {
 class FoodSearchService {
     private let apiKey = "SNb2kzUcguzzrbrHlvSEXAWIouqvXAKsWmQ4TsFg" // Replace with your USDA API Key
     private let baseURL = "https://api.nal.usda.gov/fdc/v1/foods/search"
-    private let pageSize = 1 // Adjust as necessary
+    private let pageSize = 5 // Adjust as necessary
 
     // Function to search for food using the USDA API
     func searchFood(query: String, pageNumber: Int = 1, completion: @escaping (Result<[FoodItem], Error>) -> Void) {

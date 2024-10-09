@@ -4,6 +4,7 @@ import Combine
 struct MealTrackerView: View {
     @ObservedObject var userSettings: UserSettings
     @State private var name: String = ""
+    @State private var selectedFoodName: String = "" // New state variable for the selected food name
     @State private var mealType: String = "Breakfast"
     @State private var calories: String = ""
     @State private var fat: String = ""
@@ -43,31 +44,38 @@ struct MealTrackerView: View {
 
                         if isSearching && !searchResults.isEmpty {
                             ScrollView {
-                                LazyVStack {
+                                LazyVStack(spacing: 10) { // Add spacing between results
                                     ForEach(searchResults) { food in
                                         Button(action: {
                                             selectFood(food)
                                         }) {
-                                            VStack(alignment: .leading) {
+                                            VStack(alignment: .leading, spacing: 5) { // Add spacing inside each item
                                                 Text(food.description)
                                                     .font(.headline)
+                                                    .foregroundColor(.primary) // Custom text color
                                                 Text("\(max(0, food.calories), specifier: "%.0f") kcal")
                                                     .font(.subheadline)
+                                                    .foregroundColor(.secondary)
                                             }
-                                            .padding()
-                                            .background(Color.gray.opacity(0.1))
-                                            .cornerRadius(8)
+                                            .frame(maxWidth: .infinity) // Ensure the search results are full width
+                                            .padding() // Add padding inside each item
+                                            .background(Color(.systemGray6)) // Subtle background color
+                                            .cornerRadius(10) // Rounded corners
+                                            .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2) // Add shadow
                                         }
+                                        Divider() // Add divider between results
                                     }
 
                                     if !isLoading {
                                         Button("Load more results...") {
                                             loadMoreResults(query: name)
                                         }
+                                        .padding()
                                     }
                                 }
                             }
-                            .frame(height: 200)
+                            .padding(.horizontal) // Add padding around the entire results list
+                            .frame(height: 300) // Increase the height for a better view
                         } else if isSearching && searchResults.isEmpty && !isLoading {
                             Text("No results found.")
                                 .foregroundColor(.gray)
@@ -83,11 +91,11 @@ struct MealTrackerView: View {
 
                     TextField("Calories", text: $calories)
                         .keyboardType(.decimalPad)
-                    TextField("Fat (grams)", text: $fat)
+                    TextField("Fat", text: $fat)
                         .keyboardType(.decimalPad)
-                    TextField("Protein (grams)", text: $protein)
+                    TextField("Protein", text: $protein)
                         .keyboardType(.decimalPad)
-                    TextField("Carbohydrates (grams)", text: $carbohydrates)
+                    TextField("Carbohydrates", text: $carbohydrates)
                         .keyboardType(.decimalPad)
                 }
 
@@ -164,11 +172,13 @@ struct MealTrackerView: View {
 
     // Select the food and autofill the nutritional info
     private func selectFood(_ food: FoodItem) {
-        name = food.description
-        calories = String(Int(food.calories))
-        fat = String(food.fat)
-        protein = String(food.protein)
-        carbohydrates = String(food.carbohydrates)
+        selectedFoodName = food.description // Persist the selected food name
+        name = "" // Clear the search bar
+        calories = "\(Int(food.calories)) kcal"  // Add kcal for calories
+        fat = "\(food.fat)g Fat"  // Format with unit and label
+        protein = "\(food.protein)g Protein"  // Format with unit and label
+        carbohydrates = "\(food.carbohydrates)g Carbohydrates"  // Format with unit and label
+
         searchResults = []
         isSearching = false
     }
@@ -176,12 +186,12 @@ struct MealTrackerView: View {
     // Add meal to user settings
     private func addMeal() {
         let newMeal = FoodMeal(
-            name: name,
+            name: selectedFoodName,  // Use selectedFoodName to log the food item
             mealType: mealType,
-            calories: Int(calories) ?? 0,
-            fat: Double(fat) ?? 0.0,
-            protein: Double(protein) ?? 0.0,
-            carbohydrates: Double(carbohydrates) ?? 0.0,
+            calories: Int(calories.replacingOccurrences(of: " kcal", with: "")) ?? 0,
+            fat: Double(fat.replacingOccurrences(of: "g Fat", with: "")) ?? 0.0,
+            protein: Double(protein.replacingOccurrences(of: "g Protein", with: "")) ?? 0.0,
+            carbohydrates: Double(carbohydrates.replacingOccurrences(of: "g Carbohydrates", with: "")) ?? 0.0,
             date: date
         )
 
@@ -195,6 +205,7 @@ struct MealTrackerView: View {
     // Clear form after adding a meal
     private func clearForm() {
         name = ""
+        selectedFoodName = "" // Clear the selected food name after saving
         mealType = "Breakfast"
         calories = ""
         fat = ""
