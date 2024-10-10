@@ -4,7 +4,7 @@ struct FoodLogView: View {
     @ObservedObject var userSettings: UserSettings
     @State private var selectedDate: Date = Date() // State property to hold the selected date
     @State private var showDatePicker: Bool = false // State to show/hide the DatePicker
-    
+
     var body: some View {
         NavigationView {
             VStack {
@@ -16,7 +16,7 @@ struct FoodLogView: View {
                         Image(systemName: "chevron.left")
                             .padding()
                     }
-                    
+
                     Button(action: {
                         // Show the full date picker
                         showDatePicker.toggle()
@@ -36,7 +36,7 @@ struct FoodLogView: View {
                             .padding()
                         }
                     }
-                    
+
                     Button(action: {
                         // Move to the next day
                         selectedDate = Calendar.current.date(byAdding: .day, value: 1, to: selectedDate) ?? selectedDate
@@ -45,7 +45,22 @@ struct FoodLogView: View {
                             .padding()
                     }
                 }
-                
+
+                // Display daily nutritional totals
+                if let dailyTotals = calculateDailyTotals(), dailyTotals.totalCalories > 0 {
+                    VStack(alignment: .leading) {
+                        Text("Daily Nutritional Totals")
+                            .font(.headline)
+                            .padding(.top)
+
+                        Text("Calories: \(dailyTotals.totalCalories, specifier: "%.0f") kcal")
+                        Text("Fat: \(dailyTotals.totalFat, specifier: "%.1f") g")
+                        Text("Protein: \(dailyTotals.totalProtein, specifier: "%.1f") g")
+                        Text("Carbohydrates: \(dailyTotals.totalCarbohydrates, specifier: "%.1f") g")
+                    }
+                    .padding()
+                }
+
                 if let mealsForSelectedDate = mealsForSelectedDate(), !mealsForSelectedDate.isEmpty {
                     List {
                         ForEach(mealsForSelectedDate.keys.sorted(), id: \.self) { mealType in
@@ -84,21 +99,40 @@ struct FoodLogView: View {
     private func mealsForSelectedDate() -> [String: [FoodMeal]]? {
         let calendar = Calendar.current
         let selectedDayStart = calendar.startOfDay(for: selectedDate)
-        
+
         // Filter meals to those matching the selected date
         let mealsForDate = userSettings.meals.filter {
             calendar.isDate($0.date, inSameDayAs: selectedDayStart)
         }
-        
+
         // Group the filtered meals by meal type
         let groupedMeals = Dictionary(grouping: mealsForDate, by: { $0.mealType })
         return groupedMeals.isEmpty ? nil : groupedMeals
     }
 
+    // Calculate daily nutritional totals
+    private func calculateDailyTotals() -> (totalCalories: Double, totalFat: Double, totalProtein: Double, totalCarbohydrates: Double)? {
+        let calendar = Calendar.current
+        let selectedDayStart = calendar.startOfDay(for: selectedDate)
+
+        // Filter meals to those matching the selected date
+        let mealsForDate = userSettings.meals.filter {
+            calendar.isDate($0.date, inSameDayAs: selectedDayStart)
+        }
+
+        // Sum the nutritional values for the selected date
+        let totalCalories = mealsForDate.reduce(0) { $0 + Double($1.calories) }
+        let totalFat = mealsForDate.reduce(0) { $0 + $1.fat }
+        let totalProtein = mealsForDate.reduce(0) { $0 + $1.protein }
+        let totalCarbohydrates = mealsForDate.reduce(0) { $0 + $1.carbohydrates }
+
+        return mealsForDate.isEmpty ? nil : (totalCalories, totalFat, totalProtein, totalCarbohydrates)
+    }
+
     // Delete the meal from the list and UserSettings
     private func deleteMeal(at offsets: IndexSet, in mealType: String, from meals: [FoodMeal]) {
         let mealsToDelete = offsets.map { meals[$0] }
-        
+
         for meal in mealsToDelete {
             if let index = userSettings.meals.firstIndex(where: { $0.id == meal.id }) {
                 userSettings.meals.remove(at: index)
@@ -111,7 +145,7 @@ struct FoodLogView: View {
 struct MealRowView: View {
     let meal: FoodMeal
     let mealType: String
-    
+
     var body: some View {
         HStack {
             VStack(alignment: .leading) {

@@ -90,8 +90,8 @@ struct ProfileView: View {
 
         if let calculatedBMR = bmr, let deficit = weightLossGoals[weightLossGoal] {
             let finalCalorieTarget = calculatedBMR - Double(deficit)
-            userSettings.calorieTarget = Int(finalCalorieTarget)  // Set the calorie target in UserSettings
-            
+            userSettings.calorieTarget = Int(finalCalorieTarget)  // Set the calorie target in UserSettings (this will persist)
+
             if finalCalorieTarget < 1200 {
                 showAlert = true  // Trigger alert if calorie target is below 1200
             }
