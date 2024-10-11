@@ -18,6 +18,7 @@
 		636332022C555E3A00C8989C /* MealTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636332012C555E3A00C8989C /* MealTrackerView.swift */; };
 		636332042C555F7600C8989C /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636332032C555F7600C8989C /* ProfileView.swift */; };
 		636332062C5A98CA00C8989C /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636332052C5A98C900C8989C /* UserSettings.swift */; };
+		63B217772CB8FF3400DCD311 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B217762CB8FF3400DCD311 /* SettingsView.swift */; };
 		63B9D0E42C6DD63400E4A482 /* FoodLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9D0E32C6DD63400E4A482 /* FoodLogView.swift */; };
 		63B9D0E62C6DD89000E4A482 /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9D0E52C6DD89000E4A482 /* Meal.swift */; };
 		63B9D0E82C8597E100E4A482 /* FoodSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9D0E72C8597E000E4A482 /* FoodSearchService.swift */; };
@@ -55,6 +56,7 @@
 		636332012C555E3A00C8989C /* MealTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealTrackerView.swift; sourceTree = "<group>"; };
 		636332032C555F7600C8989C /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		636332052C5A98C900C8989C /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
+		63B217762CB8FF3400DCD311 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		63B9D0E32C6DD63400E4A482 /* FoodLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLogView.swift; sourceTree = "<group>"; };
 		63B9D0E52C6DD89000E4A482 /* Meal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meal.swift; sourceTree = "<group>"; };
 		63B9D0E72C8597E000E4A482 /* FoodSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodSearchService.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 		636331C72C555AF800C8989C = {
 			isa = PBXGroup;
 			children = (
+				63B217762CB8FF3400DCD311 /* SettingsView.swift */,
 				636331D22C555AF900C8989C /* Fitness Tracker */,
 				636331E32C555AFE00C8989C /* Fitness TrackerTests */,
 				636331ED2C555AFE00C8989C /* Fitness TrackerUITests */,
@@ -283,6 +286,7 @@
 				63B9D0E42C6DD63400E4A482 /* FoodLogView.swift in Sources */,
 				636331FE2C555BD300C8989C /* Models.swift in Sources */,
 				636332002C555BFB00C8989C /* DataManager.swift in Sources */,
+				63B217772CB8FF3400DCD311 /* SettingsView.swift in Sources */,
 				63B9D0E62C6DD89000E4A482 /* Meal.swift in Sources */,
 				636331D62C555AF900C8989C /* ContentView.swift in Sources */,
 				636332062C5A98CA00C8989C /* UserSettings.swift in Sources */,

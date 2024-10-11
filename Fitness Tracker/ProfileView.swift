@@ -8,16 +8,14 @@ struct ProfileView: View {
     @State private var weightLossGoal: String = "Moderate"
     @State private var bmr: Double?
     @State private var showAlert: Bool = false // State to manage alert display
-
     @ObservedObject var userSettings: UserSettings
-
     let genders = ["Male", "Female"]
     let weightLossGoals = [
         "Aggressive": 700,
         "Moderate": 500,
         "Slow and Steady": 300
     ]
-
+    
     var body: some View {
         NavigationView {
             Form {
@@ -57,6 +55,14 @@ struct ProfileView: View {
                 }
             }
             .navigationTitle("Profile")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: SettingsView()) {
+                        Image(systemName: "gearshape")
+                            .font(.system(size: 24)) // Increase the size by adjusting the number
+                    }
+                }
+            }
             .alert(isPresented: $showAlert) {
                 Alert(title: Text("Calorie Target Warning"),
                       message: Text("Your calculated calorie target is below 1200 kcal/day, which may not be sufficient for most adults. Please consult with a healthcare provider."),
@@ -90,8 +96,8 @@ struct ProfileView: View {
 
         if let calculatedBMR = bmr, let deficit = weightLossGoals[weightLossGoal] {
             let finalCalorieTarget = calculatedBMR - Double(deficit)
-            userSettings.calorieTarget = Int(finalCalorieTarget)  // Set the calorie target in UserSettings (this will persist)
-
+            userSettings.calorieTarget = Int(finalCalorieTarget)  // Set the calorie target in UserSettings
+            
             if finalCalorieTarget < 1200 {
                 showAlert = true  // Trigger alert if calorie target is below 1200
             }
