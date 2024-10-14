@@ -3,7 +3,8 @@ import Combine
 
 struct MealTrackerView: View {
     @ObservedObject var userSettings: UserSettings
-    @State private var name: String = ""
+    @State private var name: String = "" // Custom name entered by user
+    @State private var searchQuery: String = "" // Separate field for API search
     @State private var selectedFood: FoodItem? // Hold the selected food item
     @State private var mealType: String = "Breakfast"
     @State private var calories: String = ""
@@ -31,13 +32,20 @@ struct MealTrackerView: View {
 
                 Section(header: Text("Meal Details")) {
                     VStack {
-                        TextField("Meal Name", text: $name)
-                            .onChange(of: name) { newValue in
+
+                        // API search field to pull nutrition data (moved above)
+                        TextField("Search for Food", text: $searchQuery)
+                            .onChange(of: searchQuery) { newValue in
                                 resetSearch()
                                 scheduleSearch(query: newValue)
                             }
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .padding(.bottom, isSearching ? 0 : 10)
+
+                        // Custom name field for user input
+                        TextField("Food Name", text: $name)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding(.bottom, 10)
 
                         if isLoading {
                             ProgressView("Searching...")
@@ -69,7 +77,7 @@ struct MealTrackerView: View {
 
                                     if !isLoading {
                                         Button("Load more results...") {
-                                            loadMoreResults(query: name)
+                                            loadMoreResults(query: searchQuery)
                                         }
                                         .padding()
                                     }
@@ -183,7 +191,8 @@ struct MealTrackerView: View {
     // Select the food and autofill the nutritional info
     private func selectFood(_ food: FoodItem) {
         selectedFood = food // Store the selected food item
-        name = "" // Clear the search bar
+        searchQuery = "" // Clear the search bar
+        name = food.description // Populate the custom food name field
         portion = 1.0 // Reset portion to 1 when selecting a new food
 
         updateNutritionalValues() // Initial call to set nutritional values
@@ -197,9 +206,9 @@ struct MealTrackerView: View {
         guard let food = selectedFood else { return }
 
         calories = "\(Int(food.calories * portion)) kcal"
-        fat = "\(food.fat * portion)g Fat"
-        protein = "\(food.protein * portion)g Protein"
-        carbohydrates = "\(food.carbohydrates * portion)g Carbohydrates"
+        fat = String(format: "%.2f g Fat", food.fat * portion)
+        protein = String(format: "%.2f g Protein", food.protein * portion)
+        carbohydrates = String(format: "%.2f g Carbohydrates", food.carbohydrates * portion)
     }
 
     // Add meal to user settings
@@ -207,12 +216,12 @@ struct MealTrackerView: View {
         guard let selectedFood = selectedFood else { return }
 
         let newMeal = FoodMeal(
-            name: selectedFood.description,
+            name: name.isEmpty ? selectedFood.description : name, // Use custom name if entered
             mealType: mealType,
             calories: Int(calories.replacingOccurrences(of: " kcal", with: "")) ?? 0,
-            fat: Double(fat.replacingOccurrences(of: "g Fat", with: "")) ?? 0.0,
-            protein: Double(protein.replacingOccurrences(of: "g Protein", with: "")) ?? 0.0,
-            carbohydrates: Double(carbohydrates.replacingOccurrences(of: "g Carbohydrates", with: "")) ?? 0.0,
+            fat: Double(fat.replacingOccurrences(of: " g Fat", with: "")) ?? 0.0,
+            protein: Double(protein.replacingOccurrences(of: " g Protein", with: "")) ?? 0.0,
+            carbohydrates: Double(carbohydrates.replacingOccurrences(of: " g Carbohydrates", with: "")) ?? 0.0,
             date: date
         )
 
