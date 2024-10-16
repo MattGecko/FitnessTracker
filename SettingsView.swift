@@ -5,17 +5,25 @@ struct SettingsView: View {
         Form {
             Section(header: Text("Account")) {
                 Button(action: {
-                    // Code to view terms and conditions
                     viewTermsAndConditions()
                 }) {
                     Text("View Terms and Conditions")
                 }
 
                 Button(action: {
-                    // Code to contact support
                     contactSupport()
                 }) {
                     Text("Contact Support")
+                }
+            }
+            
+            Section(header: Text("Upgrade")) {
+                Button(action: {
+                    upgradeToPremium()
+                }) {
+                    Text("Upgrade to Premium")
+                        .font(.headline)
+                        .foregroundColor(.blue)
                 }
             }
         }
@@ -31,6 +39,12 @@ struct SettingsView: View {
     private func contactSupport() {
         // Handle contacting support
         print("Contacting Support")
+    }
+    
+    private func upgradeToPremium() {
+        // Placeholder for launching the paywall screen
+        print("Upgrade to Premium button tapped")
+        // This will eventually trigger the paywall screen (e.g., RevenueCat or StoreKit)
     }
 }
 

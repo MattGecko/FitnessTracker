@@ -15,7 +15,7 @@ struct ProfileView: View {
         "Moderate": 500,
         "Slow and Steady": 300
     ]
-    
+
     var body: some View {
         NavigationView {
             Form {
@@ -32,7 +32,7 @@ struct ProfileView: View {
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
-                    
+
                     Picker("Weight Loss Goal", selection: $weightLossGoal) {
                         ForEach(weightLossGoals.keys.sorted(), id: \.self) { key in
                             Text(key).tag(key)
@@ -59,7 +59,8 @@ struct ProfileView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink(destination: SettingsView()) {
                         Image(systemName: "gearshape")
-                            .font(.system(size: 24)) // Increase the size by adjusting the number
+                            .font(.system(size: 24)) // Adjust the size of the gear icon
+                            .foregroundColor(.blue)  // Customize the color of the gear icon
                     }
                 }
             }
@@ -75,13 +76,13 @@ struct ProfileView: View {
         guard let ageNum = Int(age), let weightNum = Double(weight), let heightNum = Double(height) else {
             return  // Optionally add user feedback here to indicate input error
         }
-        
+
         let isMale = gender == "Male"
-        
+
         let weightComponent: Double
         let heightComponent: Double
         let ageComponent: Double
-        
+
         if isMale {
             weightComponent = 13.397 * weightNum
             heightComponent = 4.799 * heightNum
@@ -96,10 +97,10 @@ struct ProfileView: View {
 
         if let calculatedBMR = bmr, let deficit = weightLossGoals[weightLossGoal] {
             let finalCalorieTarget = calculatedBMR - Double(deficit)
-            userSettings.calorieTarget = Int(finalCalorieTarget)  // Set the calorie target in UserSettings
-            
+            userSettings.calorieTarget = Int(finalCalorieTarget)
+
             if finalCalorieTarget < 1200 {
-                showAlert = true  // Trigger alert if calorie target is below 1200
+                showAlert = true
             }
         }
     }
