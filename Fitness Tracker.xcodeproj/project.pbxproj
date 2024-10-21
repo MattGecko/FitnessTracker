@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		630918E82CC62E700072316C /* TermsAndConditionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630918E72CC62E6F0072316C /* TermsAndConditionsView.swift */; };
 		636331D62C555AF900C8989C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636331D52C555AF900C8989C /* ContentView.swift */; };
 		636331D82C555AFD00C8989C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 636331D72C555AFD00C8989C /* Assets.xcassets */; };
 		636331DB2C555AFD00C8989C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 636331DA2C555AFD00C8989C /* Preview Assets.xcassets */; };
@@ -42,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		630918E72CC62E6F0072316C /* TermsAndConditionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsView.swift; sourceTree = "<group>"; };
 		636331D02C555AF900C8989C /* Fitness Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fitness Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		636331D52C555AF900C8989C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		636331D72C555AFD00C8989C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -90,6 +92,7 @@
 		636331C72C555AF800C8989C = {
 			isa = PBXGroup;
 			children = (
+				630918E72CC62E6F0072316C /* TermsAndConditionsView.swift */,
 				63B217762CB8FF3400DCD311 /* SettingsView.swift */,
 				636331D22C555AF900C8989C /* Fitness Tracker */,
 				636331E32C555AFE00C8989C /* Fitness TrackerTests */,
@@ -283,6 +286,7 @@
 			files = (
 				636332022C555E3A00C8989C /* MealTrackerView.swift in Sources */,
 				63B9D0E82C8597E100E4A482 /* FoodSearchService.swift in Sources */,
+				630918E82CC62E700072316C /* TermsAndConditionsView.swift in Sources */,
 				63B9D0E42C6DD63400E4A482 /* FoodLogView.swift in Sources */,
 				636331FE2C555BD300C8989C /* Models.swift in Sources */,
 				636332002C555BFB00C8989C /* DataManager.swift in Sources */,
