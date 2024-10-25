@@ -53,10 +53,9 @@ struct ProfileView: View {
                     .keyboardType(.numberPad)
                     .focused($isCalorieGoalFocused)
 
-                    // Add a custom "Done" button below the calorie target field
                     if isCalorieGoalFocused {
                         Button("Done") {
-                            isCalorieGoalFocused = false // Dismiss the keyboard
+                            isCalorieGoalFocused = false
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
@@ -64,13 +63,22 @@ struct ProfileView: View {
                         .foregroundColor(.white)
                         .cornerRadius(8)
                     }
-                    
+
                     Button("Calculate BMR and Calorie Target") {
                         calculateBMRandCalorieTarget()
                     }
                 }
             }
             .navigationTitle("Profile")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: SettingsView()) {
+                        Image(systemName: "gearshape")
+                            .font(.system(size: 24))
+                            .foregroundColor(.blue)
+                    }
+                }
+            }
             .alert(isPresented: $showAlert) {
                 Alert(title: Text("Calorie Target Warning"),
                       message: Text("Your calculated calorie target is below 1200 kcal/day, which may not be sufficient for most adults. Please consult with a healthcare provider."),
