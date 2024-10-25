@@ -14,6 +14,14 @@ extension View {
     }
 }
 
+
+extension View {
+    func numberPadDismissToolbar() -> some View {
+        self.modifier(DismissKeyboardModifier())
+    }
+}
+
+
 struct ProfileView: View {
     @State private var age: String = ""
     @State private var weight: String = ""
@@ -32,6 +40,8 @@ struct ProfileView: View {
         "Slow and Steady": 300
     ]
 
+    
+    
     var body: some View {
         NavigationView {
             Form {
@@ -45,15 +55,15 @@ struct ProfileView: View {
                     
                     TextField("Age", text: $age)
                         .keyboardType(.numberPad)
-                        .dismissKeyboardOnDone()
+                        .numberPadDismissToolbar()
 
                     TextField(unitSystem == "Metric" ? "Weight in kg" : "Weight in lbs", text: $weight)
                         .keyboardType(.decimalPad)
-                        .dismissKeyboardOnDone()
+                        .numberPadDismissToolbar()
 
                     TextField(unitSystem == "Metric" ? "Height in cm" : "Height in inches", text: $height)
                         .keyboardType(.decimalPad)
-                        .dismissKeyboardOnDone()
+                        .numberPadDismissToolbar()
 
                     Picker("Gender", selection: $gender) {
                         ForEach(genders, id: \.self) { gender in
@@ -78,7 +88,7 @@ struct ProfileView: View {
                         set: { userSettings.calorieTarget = Int($0) ?? userSettings.calorieTarget }
                     ))
                     .keyboardType(.numberPad)
-                    .dismissKeyboardOnDone()
+                    .numberPadDismissToolbar()
 
                     Button("Calculate BMR and Calorie Target") {
                         calculateBMRandCalorieTarget()
