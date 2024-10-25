@@ -1,28 +1,36 @@
 import SwiftUI
 
+// Custom ViewModifier to handle keyboard dismissal on "Done"
+struct DismissKeyboardModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .onSubmit { UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) }
+    }
+}
+
+extension View {
+    func dismissKeyboardOnDone() -> some View {
+        self.modifier(DismissKeyboardModifier())
+    }
+}
+
 struct ProfileView: View {
     @State private var age: String = ""
     @State private var weight: String = ""
     @State private var height: String = ""
     @State private var gender: String = "Male"
-    @State private var unitSystem: String = "Metric" // New state for unit system toggle
+    @State private var unitSystem: String = "Metric"
     @State private var weightLossGoal: String = "Moderate"
     @State private var bmr: Double?
-    @State private var showAlert: Bool = false // State to manage alert display
+    @State private var showAlert: Bool = false
     @ObservedObject var userSettings: UserSettings
     let genders = ["Male", "Female"]
-    let unitSystems = ["Metric", "Imperial"] // Options for unit system
+    let unitSystems = ["Metric", "Imperial"]
     let weightLossGoals = [
         "Aggressive": 700,
         "Moderate": 500,
         "Slow and Steady": 300
     ]
-    
-    @FocusState private var focusedField: Field? // State to track which field is focused
-
-    enum Field {
-        case age, weight, height
-    }
 
     var body: some View {
         NavigationView {
@@ -34,44 +42,19 @@ struct ProfileView: View {
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
-                    .padding(.vertical)
                     
                     TextField("Age", text: $age)
                         .keyboardType(.numberPad)
-                        .focused($focusedField, equals: .age)
-                        .toolbar {
-                            ToolbarItemGroup(placement: .keyboard) {
-                                Spacer()
-                                Button("Done") {
-                                    focusedField = nil
-                                }
-                            }
-                        }
-                    
+                        .dismissKeyboardOnDone()
+
                     TextField(unitSystem == "Metric" ? "Weight in kg" : "Weight in lbs", text: $weight)
                         .keyboardType(.decimalPad)
-                        .focused($focusedField, equals: .weight)
-                        .toolbar {
-                            ToolbarItemGroup(placement: .keyboard) {
-                                Spacer()
-                                Button("Done") {
-                                    focusedField = nil
-                                }
-                            }
-                        }
-                    
+                        .dismissKeyboardOnDone()
+
                     TextField(unitSystem == "Metric" ? "Height in cm" : "Height in inches", text: $height)
                         .keyboardType(.decimalPad)
-                        .focused($focusedField, equals: .height)
-                        .toolbar {
-                            ToolbarItemGroup(placement: .keyboard) {
-                                Spacer()
-                                Button("Done") {
-                                    focusedField = nil
-                                }
-                            }
-                        }
-                    
+                        .dismissKeyboardOnDone()
+
                     Picker("Gender", selection: $gender) {
                         ForEach(genders, id: \.self) { gender in
                             Text(gender)
@@ -95,15 +78,8 @@ struct ProfileView: View {
                         set: { userSettings.calorieTarget = Int($0) ?? userSettings.calorieTarget }
                     ))
                     .keyboardType(.numberPad)
-                    .toolbar {
-                        ToolbarItemGroup(placement: .keyboard) {
-                            Spacer()
-                            Button("Done") {
-                                focusedField = nil
-                            }
-                        }
-                    }
-                    
+                    .dismissKeyboardOnDone()
+
                     Button("Calculate BMR and Calorie Target") {
                         calculateBMRandCalorieTarget()
                     }
@@ -170,3 +146,4 @@ struct ProfileView_Previews: PreviewProvider {
         ProfileView(userSettings: UserSettings())
     }
 }
+
