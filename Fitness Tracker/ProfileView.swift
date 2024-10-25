@@ -4,6 +4,9 @@ struct ProfileView: View {
     @State private var age: String = ""
     @State private var weight: String = ""
     @State private var height: String = ""
+    @State private var feet: String = ""
+    @State private var inches: String = ""
+    @State private var isMetric: Bool = true // Toggle state for metric/imperial
     @State private var gender: String = "Male"
     @State private var weightLossGoal: String = "Moderate"
     @State private var bmr: Double?
@@ -20,19 +23,35 @@ struct ProfileView: View {
         NavigationView {
             Form {
                 Section(header: Text("Enter Your Details")) {
+                    Toggle(isOn: $isMetric) {
+                        Text(isMetric ? "Metric (kg, cm)" : "Imperial (lbs, ft & in)")
+                    }
+                    
                     TextField("Age", text: $age)
                         .keyboardType(.numberPad)
-                    TextField("Weight in kg", text: $weight)
+                    
+                    TextField(isMetric ? "Weight in kg" : "Weight in lbs", text: $weight)
                         .keyboardType(.decimalPad)
-                    TextField("Height in cm", text: $height)
-                        .keyboardType(.decimalPad)
+                    
+                    if isMetric {
+                        TextField("Height in cm", text: $height)
+                            .keyboardType(.decimalPad)
+                    } else {
+                        HStack {
+                            TextField("Height (ft)", text: $feet)
+                                .keyboardType(.numberPad)
+                            TextField("Height (in)", text: $inches)
+                                .keyboardType(.numberPad)
+                        }
+                    }
+                    
                     Picker("Gender", selection: $gender) {
                         ForEach(genders, id: \.self) { gender in
                             Text(gender)
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
-
+                    
                     Picker("Weight Loss Goal", selection: $weightLossGoal) {
                         ForEach(weightLossGoals.keys.sorted(), id: \.self) { key in
                             Text(key).tag(key)
@@ -49,6 +68,7 @@ struct ProfileView: View {
                         set: { userSettings.calorieTarget = Int($0) ?? userSettings.calorieTarget }
                     ))
                     .keyboardType(.numberPad)
+                    
                     Button("Calculate BMR and Calorie Target") {
                         calculateBMRandCalorieTarget()
                     }
@@ -73,24 +93,28 @@ struct ProfileView: View {
     }
 
     private func calculateBMRandCalorieTarget() {
-        guard let ageNum = Int(age), let weightNum = Double(weight), let heightNum = Double(height) else {
-            return  // Optionally add user feedback here to indicate input error
-        }
-
+        guard let ageNum = Int(age),
+              let weightNum = Double(weight),
+              let heightNum = isMetric ? Double(height) : (Double(feet) ?? 0) * 30.48 + (Double(inches) ?? 0) * 2.54
+        else { return }
+        
         let isMale = gender == "Male"
-
+        
         let weightComponent: Double
         let heightComponent: Double
         let ageComponent: Double
+        
+        let weightInKg = isMetric ? weightNum : weightNum * 0.453592 // Convert lbs to kg if using imperial
+        let heightInCm = isMetric ? heightNum : (Double(feet) ?? 0) * 30.48 + (Double(inches) ?? 0) * 2.54 // Convert ft and in to cm if using imperial
 
         if isMale {
-            weightComponent = 13.397 * weightNum
-            heightComponent = 4.799 * heightNum
+            weightComponent = 13.397 * weightInKg
+            heightComponent = 4.799 * heightInCm
             ageComponent = 5.677 * Double(ageNum)
             bmr = 88.362 + weightComponent + heightComponent - ageComponent
         } else {
-            weightComponent = 9.247 * weightNum
-            heightComponent = 3.098 * heightNum
+            weightComponent = 9.247 * weightInKg
+            heightComponent = 3.098 * heightInCm
             ageComponent = 4.330 * Double(ageNum)
             bmr = 447.593 + weightComponent + heightComponent - ageComponent
         }
@@ -98,7 +122,7 @@ struct ProfileView: View {
         if let calculatedBMR = bmr, let deficit = weightLossGoals[weightLossGoal] {
             let finalCalorieTarget = calculatedBMR - Double(deficit)
             userSettings.calorieTarget = Int(finalCalorieTarget)
-
+            
             if finalCalorieTarget < 1200 {
                 showAlert = true
             }
