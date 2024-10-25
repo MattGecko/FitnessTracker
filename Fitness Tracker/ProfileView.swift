@@ -4,46 +4,73 @@ struct ProfileView: View {
     @State private var age: String = ""
     @State private var weight: String = ""
     @State private var height: String = ""
-    @State private var feet: String = ""
-    @State private var inches: String = ""
-    @State private var isMetric: Bool = true // Toggle state for metric/imperial
     @State private var gender: String = "Male"
+    @State private var unitSystem: String = "Metric" // New state for unit system toggle
     @State private var weightLossGoal: String = "Moderate"
     @State private var bmr: Double?
     @State private var showAlert: Bool = false // State to manage alert display
     @ObservedObject var userSettings: UserSettings
     let genders = ["Male", "Female"]
+    let unitSystems = ["Metric", "Imperial"] // Options for unit system
     let weightLossGoals = [
         "Aggressive": 700,
         "Moderate": 500,
         "Slow and Steady": 300
     ]
+    
+    @FocusState private var focusedField: Field? // State to track which field is focused
+
+    enum Field {
+        case age, weight, height
+    }
 
     var body: some View {
         NavigationView {
             Form {
                 Section(header: Text("Enter Your Details")) {
-                    Toggle(isOn: $isMetric) {
-                        Text(isMetric ? "Metric (kg, cm)" : "Imperial (lbs, ft & in)")
+                    Picker("Unit System", selection: $unitSystem) {
+                        ForEach(unitSystems, id: \.self) { unit in
+                            Text(unit)
+                        }
                     }
+                    .pickerStyle(SegmentedPickerStyle())
+                    .padding(.vertical)
                     
                     TextField("Age", text: $age)
                         .keyboardType(.numberPad)
-                    
-                    TextField(isMetric ? "Weight in kg" : "Weight in lbs", text: $weight)
-                        .keyboardType(.decimalPad)
-                    
-                    if isMetric {
-                        TextField("Height in cm", text: $height)
-                            .keyboardType(.decimalPad)
-                    } else {
-                        HStack {
-                            TextField("Height (ft)", text: $feet)
-                                .keyboardType(.numberPad)
-                            TextField("Height (in)", text: $inches)
-                                .keyboardType(.numberPad)
+                        .focused($focusedField, equals: .age)
+                        .toolbar {
+                            ToolbarItemGroup(placement: .keyboard) {
+                                Spacer()
+                                Button("Done") {
+                                    focusedField = nil
+                                }
+                            }
                         }
-                    }
+                    
+                    TextField(unitSystem == "Metric" ? "Weight in kg" : "Weight in lbs", text: $weight)
+                        .keyboardType(.decimalPad)
+                        .focused($focusedField, equals: .weight)
+                        .toolbar {
+                            ToolbarItemGroup(placement: .keyboard) {
+                                Spacer()
+                                Button("Done") {
+                                    focusedField = nil
+                                }
+                            }
+                        }
+                    
+                    TextField(unitSystem == "Metric" ? "Height in cm" : "Height in inches", text: $height)
+                        .keyboardType(.decimalPad)
+                        .focused($focusedField, equals: .height)
+                        .toolbar {
+                            ToolbarItemGroup(placement: .keyboard) {
+                                Spacer()
+                                Button("Done") {
+                                    focusedField = nil
+                                }
+                            }
+                        }
                     
                     Picker("Gender", selection: $gender) {
                         ForEach(genders, id: \.self) { gender in
@@ -51,7 +78,7 @@ struct ProfileView: View {
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
-                    
+
                     Picker("Weight Loss Goal", selection: $weightLossGoal) {
                         ForEach(weightLossGoals.keys.sorted(), id: \.self) { key in
                             Text(key).tag(key)
@@ -68,6 +95,14 @@ struct ProfileView: View {
                         set: { userSettings.calorieTarget = Int($0) ?? userSettings.calorieTarget }
                     ))
                     .keyboardType(.numberPad)
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            Spacer()
+                            Button("Done") {
+                                focusedField = nil
+                            }
+                        }
+                    }
                     
                     Button("Calculate BMR and Calorie Target") {
                         calculateBMRandCalorieTarget()
@@ -79,8 +114,8 @@ struct ProfileView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink(destination: SettingsView()) {
                         Image(systemName: "gearshape")
-                            .font(.system(size: 24)) // Adjust the size of the gear icon
-                            .foregroundColor(.blue)  // Customize the color of the gear icon
+                            .font(.system(size: 24))
+                            .foregroundColor(.blue)
                     }
                 }
             }
@@ -95,17 +130,17 @@ struct ProfileView: View {
     private func calculateBMRandCalorieTarget() {
         guard let ageNum = Int(age),
               let weightNum = Double(weight),
-              let heightNum = isMetric ? Double(height) : (Double(feet) ?? 0) * 30.48 + (Double(inches) ?? 0) * 2.54
-        else { return }
-        
+              let heightNum = Double(height) else {
+            return
+        }
+
         let isMale = gender == "Male"
-        
+        let weightInKg = unitSystem == "Metric" ? weightNum : weightNum * 0.453592
+        let heightInCm = unitSystem == "Metric" ? heightNum : heightNum * 2.54
+
         let weightComponent: Double
         let heightComponent: Double
         let ageComponent: Double
-        
-        let weightInKg = isMetric ? weightNum : weightNum * 0.453592 // Convert lbs to kg if using imperial
-        let heightInCm = isMetric ? heightNum : (Double(feet) ?? 0) * 30.48 + (Double(inches) ?? 0) * 2.54 // Convert ft and in to cm if using imperial
 
         if isMale {
             weightComponent = 13.397 * weightInKg
@@ -122,7 +157,7 @@ struct ProfileView: View {
         if let calculatedBMR = bmr, let deficit = weightLossGoals[weightLossGoal] {
             let finalCalorieTarget = calculatedBMR - Double(deficit)
             userSettings.calorieTarget = Int(finalCalorieTarget)
-            
+
             if finalCalorieTarget < 1200 {
                 showAlert = true
             }
