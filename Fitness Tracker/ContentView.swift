@@ -1,13 +1,25 @@
 import SwiftUI
+import RevenueCat
 
 @main
 struct FitnessTrackerApp: App {
+    
+    
     var body: some Scene {
         WindowGroup {
             ContentView() // This is where your ContentView is set as the root view
         }
     }
-}
+    
+   // init(){
+        
+    //    Purchases.logLevel = .debug
+     //   Purchases.configure(withAPIKey: "appl_lLUTDjrcfeuWHRNqGYxfwIfOHTb")
+        
+   // }
+    }
+    
+
 
 
 struct ContentView: View {

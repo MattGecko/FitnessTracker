@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		630918E82CC62E700072316C /* TermsAndConditionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630918E72CC62E6F0072316C /* TermsAndConditionsView.swift */; };
+		630918EC2CDDF7AF0072316C /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 630918EB2CDDF7AE0072316C /* StoreKit.framework */; };
 		636331D62C555AF900C8989C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636331D52C555AF900C8989C /* ContentView.swift */; };
 		636331D82C555AFD00C8989C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 636331D72C555AFD00C8989C /* Assets.xcassets */; };
 		636331DB2C555AFD00C8989C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 636331DA2C555AFD00C8989C /* Preview Assets.xcassets */; };
@@ -19,6 +20,8 @@
 		636332022C555E3A00C8989C /* MealTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636332012C555E3A00C8989C /* MealTrackerView.swift */; };
 		636332042C555F7600C8989C /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636332032C555F7600C8989C /* ProfileView.swift */; };
 		636332062C5A98CA00C8989C /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636332052C5A98C900C8989C /* UserSettings.swift */; };
+		639683842CE33F8700B2EF94 /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 639683832CE33F8700B2EF94 /* RevenueCat */; };
+		639683862CE33F8700B2EF94 /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = 639683852CE33F8700B2EF94 /* RevenueCatUI */; };
 		63B217772CB8FF3400DCD311 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B217762CB8FF3400DCD311 /* SettingsView.swift */; };
 		63B9D0E42C6DD63400E4A482 /* FoodLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9D0E32C6DD63400E4A482 /* FoodLogView.swift */; };
 		63B9D0E62C6DD89000E4A482 /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9D0E52C6DD89000E4A482 /* Meal.swift */; };
@@ -44,6 +47,7 @@
 
 /* Begin PBXFileReference section */
 		630918E72CC62E6F0072316C /* TermsAndConditionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsView.swift; sourceTree = "<group>"; };
+		630918EB2CDDF7AE0072316C /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		636331D02C555AF900C8989C /* Fitness Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fitness Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		636331D52C555AF900C8989C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		636331D72C555AFD00C8989C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -69,6 +73,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				639683842CE33F8700B2EF94 /* RevenueCat in Frameworks */,
+				630918EC2CDDF7AF0072316C /* StoreKit.framework in Frameworks */,
+				639683862CE33F8700B2EF94 /* RevenueCatUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,6 +96,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		630918EA2CDDF7AE0072316C /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				630918EB2CDDF7AE0072316C /* StoreKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		636331C72C555AF800C8989C = {
 			isa = PBXGroup;
 			children = (
@@ -98,6 +113,7 @@
 				636331E32C555AFE00C8989C /* Fitness TrackerTests */,
 				636331ED2C555AFE00C8989C /* Fitness TrackerUITests */,
 				636331D12C555AF900C8989C /* Products */,
+				630918EA2CDDF7AE0072316C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -170,6 +186,10 @@
 			dependencies = (
 			);
 			name = "Fitness Tracker";
+			packageProductDependencies = (
+				639683832CE33F8700B2EF94 /* RevenueCat */,
+				639683852CE33F8700B2EF94 /* RevenueCatUI */,
+			);
 			productName = "Fitness Tracker";
 			productReference = 636331D02C555AF900C8989C /* Fitness Tracker.app */;
 			productType = "com.apple.product-type.application";
@@ -242,6 +262,9 @@
 				Base,
 			);
 			mainGroup = 636331C72C555AF800C8989C;
+			packageReferences = (
+				639683822CE33F8700B2EF94 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
+			);
 			productRefGroup = 636331D12C555AF900C8989C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -455,12 +478,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Fitness Tracker/Preview Content\"";
-				DEVELOPMENT_TEAM = EZC8E46DNW;
+				DEVELOPMENT_ASSET_PATHS = "Fitness\\ Tracker/Preview\\ Content Fitness\\ Tracker/Assets.xcassets";
+				DEVELOPMENT_TEAM = F8QCHMXDDT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Clarity Calorie Counter";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -484,12 +509,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Fitness Tracker/Preview Content\"";
-				DEVELOPMENT_TEAM = EZC8E46DNW;
+				DEVELOPMENT_ASSET_PATHS = "Fitness\\ Tracker/Preview\\ Content Fitness\\ Tracker/Assets.xcassets";
+				DEVELOPMENT_TEAM = F8QCHMXDDT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Clarity Calorie Counter";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -624,6 +651,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		639683822CE33F8700B2EF94 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		639683832CE33F8700B2EF94 /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 639683822CE33F8700B2EF94 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCat;
+		};
+		639683852CE33F8700B2EF94 /* RevenueCatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 639683822CE33F8700B2EF94 /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCatUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 636331C82C555AF800C8989C /* Project object */;
 }
