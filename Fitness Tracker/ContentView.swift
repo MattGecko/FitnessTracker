@@ -1,5 +1,6 @@
 import SwiftUI
 import RevenueCat
+import RevenueCatUI
 
 @main
 struct FitnessTrackerApp: App {
@@ -8,15 +9,18 @@ struct FitnessTrackerApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView() // This is where your ContentView is set as the root view
+                .presentPaywallIfNeeded(requiredEntitlementIdentifier: "PRO")
+            
         }
+        
     }
     
-   // init(){
+    init(){
         
-    //    Purchases.logLevel = .debug
-     //   Purchases.configure(withAPIKey: "appl_lLUTDjrcfeuWHRNqGYxfwIfOHTb")
+        Purchases.logLevel = .debug
+        Purchases.configure(withAPIKey: "appl_lLUTDjrcfeuWHRNqGYxfwIfOHTb")
         
-   // }
+    }
     }
     
 
