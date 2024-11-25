@@ -20,8 +20,11 @@ struct FitnessTrackerApp: App {
         Purchases.logLevel = .debug
         Purchases.configure(withAPIKey: "appl_lLUTDjrcfeuWHRNqGYxfwIfOHTb")
         
+           
     }
-    }
+    
+    
+}
     
 
 

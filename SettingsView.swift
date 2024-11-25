@@ -1,5 +1,6 @@
 import SwiftUI
 import MessageUI
+import RevenueCat
 
 struct SettingsView: View {
     @State private var isShowingMailView = false
@@ -55,8 +56,30 @@ struct SettingsView: View {
     }
 
     private func upgradeToPremium() {
-        print("Upgrade to Premium button tapped")
-        // This will eventually trigger the paywall screen (e.g., RevenueCat or StoreKit)
+        Purchases.shared.getOfferings { (offerings, error) in
+            if let error = error {
+                print("Error fetching offerings: \(error.localizedDescription)")
+                return
+            }
+            
+            if let offering = offerings?.current {
+                Purchases.shared.purchase(package: offering.availablePackages.first!) { (transaction, customerInfo, error, userCancelled) in
+                    if let error = error {
+                        print("Error during purchase: \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    if let customerInfo = customerInfo, customerInfo.entitlements["premium"]?.isActive == true {
+                        print("User has successfully upgraded to premium!")
+                        // Add any post-upgrade actions here
+                    } else if userCancelled {
+                        print("User cancelled the purchase.")
+                    }
+                }
+            } else {
+                print("No available offerings found.")
+            }
+        }
     }
 }
 
