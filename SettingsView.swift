@@ -1,6 +1,5 @@
 import SwiftUI
 import MessageUI
-import RevenueCat
 
 struct SettingsView: View {
     @State private var isShowingMailView = false
@@ -27,13 +26,9 @@ struct SettingsView: View {
                 }
             }
 
-            Section(header: Text("Upgrade")) {
-                Button(action: {
-                    upgradeToPremium()
-                }) {
-                    Text("Upgrade to Premium")
-                        .font(.headline)
-                        .foregroundColor(.blue)
+            Section(header: Text("Information")) {
+                NavigationLink(destination: InfoSourcesView()) {
+                    Text("Information Sources")
                 }
             }
         }
@@ -54,32 +49,14 @@ struct SettingsView: View {
             isShowingMailErrorAlert = true
         }
     }
+}
 
-    private func upgradeToPremium() {
-        Purchases.shared.getOfferings { (offerings, error) in
-            if let error = error {
-                print("Error fetching offerings: \(error.localizedDescription)")
-                return
-            }
-            
-            if let offering = offerings?.current {
-                Purchases.shared.purchase(package: offering.availablePackages.first!) { (transaction, customerInfo, error, userCancelled) in
-                    if let error = error {
-                        print("Error during purchase: \(error.localizedDescription)")
-                        return
-                    }
-                    
-                    if let customerInfo = customerInfo, customerInfo.entitlements["premium"]?.isActive == true {
-                        print("User has successfully upgraded to premium!")
-                        // Add any post-upgrade actions here
-                    } else if userCancelled {
-                        print("User cancelled the purchase.")
-                    }
-                }
-            } else {
-                print("No available offerings found.")
-            }
-        }
+// Placeholder for Information Sources View
+struct InformationSourcesView: View {
+    var body: some View {
+        Text("Information Sources content goes here.")
+            .padding()
+            .navigationTitle("Information Sources")
     }
 }
 

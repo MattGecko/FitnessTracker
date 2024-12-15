@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		630918E82CC62E700072316C /* TermsAndConditionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630918E72CC62E6F0072316C /* TermsAndConditionsView.swift */; };
 		630918EC2CDDF7AF0072316C /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 630918EB2CDDF7AE0072316C /* StoreKit.framework */; };
+		632A5EFD2D04B082000DFE3E /* InfoSourcesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632A5EFC2D04B07D000DFE3E /* InfoSourcesView.swift */; };
 		636331D62C555AF900C8989C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636331D52C555AF900C8989C /* ContentView.swift */; };
 		636331D82C555AFD00C8989C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 636331D72C555AFD00C8989C /* Assets.xcassets */; };
 		636331DB2C555AFD00C8989C /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 636331DA2C555AFD00C8989C /* Preview Assets.xcassets */; };
@@ -48,6 +49,7 @@
 /* Begin PBXFileReference section */
 		630918E72CC62E6F0072316C /* TermsAndConditionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAndConditionsView.swift; sourceTree = "<group>"; };
 		630918EB2CDDF7AE0072316C /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		632A5EFC2D04B07D000DFE3E /* InfoSourcesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoSourcesView.swift; sourceTree = "<group>"; };
 		636331D02C555AF900C8989C /* Fitness Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Fitness Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		636331D52C555AF900C8989C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		636331D72C555AFD00C8989C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				630918E72CC62E6F0072316C /* TermsAndConditionsView.swift */,
+				632A5EFC2D04B07D000DFE3E /* InfoSourcesView.swift */,
 				63B217762CB8FF3400DCD311 /* SettingsView.swift */,
 				636331D22C555AF900C8989C /* Fitness Tracker */,
 				636331E32C555AFE00C8989C /* Fitness TrackerTests */,
@@ -307,6 +310,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				632A5EFD2D04B082000DFE3E /* InfoSourcesView.swift in Sources */,
 				636332022C555E3A00C8989C /* MealTrackerView.swift in Sources */,
 				63B9D0E82C8597E100E4A482 /* FoodSearchService.swift in Sources */,
 				630918E82CC62E700072316C /* TermsAndConditionsView.swift in Sources */,
@@ -494,11 +498,12 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.joshcooling.Fitness-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -530,11 +535,12 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.joshcooling.Fitness-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
