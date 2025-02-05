@@ -27,6 +27,7 @@
 		63B9D0E42C6DD63400E4A482 /* FoodLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9D0E32C6DD63400E4A482 /* FoodLogView.swift */; };
 		63B9D0E62C6DD89000E4A482 /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9D0E52C6DD89000E4A482 /* Meal.swift */; };
 		63B9D0E82C8597E100E4A482 /* FoodSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B9D0E72C8597E000E4A482 /* FoodSearchService.swift */; };
+		63D9A55B2D53AE5700EAC7FA /* RadialMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D9A55A2D53AE4D00EAC7FA /* RadialMenuView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		63B9D0E32C6DD63400E4A482 /* FoodLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodLogView.swift; sourceTree = "<group>"; };
 		63B9D0E52C6DD89000E4A482 /* Meal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meal.swift; sourceTree = "<group>"; };
 		63B9D0E72C8597E000E4A482 /* FoodSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodSearchService.swift; sourceTree = "<group>"; };
+		63D9A55A2D53AE4D00EAC7FA /* RadialMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadialMenuView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +136,7 @@
 			isa = PBXGroup;
 			children = (
 				636331D52C555AF900C8989C /* ContentView.swift */,
+				63D9A55A2D53AE4D00EAC7FA /* RadialMenuView.swift */,
 				636332052C5A98C900C8989C /* UserSettings.swift */,
 				636332032C555F7600C8989C /* ProfileView.swift */,
 				636332012C555E3A00C8989C /* MealTrackerView.swift */,
@@ -310,6 +313,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63D9A55B2D53AE5700EAC7FA /* RadialMenuView.swift in Sources */,
 				632A5EFD2D04B082000DFE3E /* InfoSourcesView.swift in Sources */,
 				636332022C555E3A00C8989C /* MealTrackerView.swift in Sources */,
 				63B9D0E82C8597E100E4A482 /* FoodSearchService.swift in Sources */,
@@ -503,7 +507,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.joshcooling.Fitness-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -540,7 +544,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.4;
+				MARKETING_VERSION = 1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.example.joshcooling.Fitness-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

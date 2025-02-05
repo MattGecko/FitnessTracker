@@ -10,6 +10,7 @@ struct ProfileView: View {
     @State private var showAlert: Bool = false
     @ObservedObject var userSettings: UserSettings
     @FocusState private var isCalorieGoalFocused: Bool
+    @FocusState private var isTextFieldFocused: Bool // Track all text field focus states
 
     let genders = ["Male", "Female"]
     let weightLossGoals = [
@@ -24,10 +25,16 @@ struct ProfileView: View {
                 Section(header: Text("Enter Your Details")) {
                     TextField("Age", text: $age)
                         .keyboardType(.numberPad)
+                        .focused($isTextFieldFocused)
+
                     TextField("Weight in kg", text: $weight)
                         .keyboardType(.decimalPad)
+                        .focused($isTextFieldFocused)
+
                     TextField("Height in cm", text: $height)
                         .keyboardType(.decimalPad)
+                        .focused($isTextFieldFocused)
+
                     Picker("Gender", selection: $gender) {
                         ForEach(genders, id: \.self) { gender in
                             Text(gender)
@@ -51,7 +58,7 @@ struct ProfileView: View {
                         set: { userSettings.calorieTarget = Int($0) ?? userSettings.calorieTarget }
                     ))
                     .keyboardType(.numberPad)
-                    .focused($isCalorieGoalFocused)
+                    .focused($isTextFieldFocused)
 
                     if isCalorieGoalFocused {
                         Button("Done") {
@@ -83,6 +90,10 @@ struct ProfileView: View {
                 Alert(title: Text("Calorie Target Warning"),
                       message: Text("Your calculated calorie target is below 1200 kcal/day, which may not be sufficient for most adults. Please consult with a healthcare provider."),
                       dismissButton: .default(Text("OK")))
+            }
+            .onTapGesture {
+                // Dismiss the keyboard when tapping outside text fields
+                isTextFieldFocused = false
             }
         }
     }

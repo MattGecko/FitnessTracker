@@ -56,6 +56,30 @@ struct InfoSourcesView: View {
                         .foregroundColor(.blue)
                 }
                 .padding(.vertical, 5)
+                
+                // BMR Calculation
+                               VStack(alignment: .leading, spacing: 5) {
+                                   Text("📊 BMR Calculation")
+                                       .font(.headline)
+                                   Text("The **Basal Metabolic Rate (BMR)** is an estimate of the number of calories your body needs to maintain basic functions while at rest. Clarity Calorie Counter uses the **Mifflin-St Jeor Equation**, which is widely regarded as one of the most accurate BMR formulas.")
+                                       .font(.body)
+                                   
+                                   Text("The formula is as follows:")
+                                       .font(.subheadline)
+                                       .padding(.top, 5)
+                                   Text("""
+                                   For Males: BMR = 88.362 + (13.397 × weight in kg) + (4.799 × height in cm) - (5.677 × age in years)
+                                   For Females: BMR = 447.593 + (9.247 × weight in kg) + (3.098 × height in cm) - (4.330 × age in years)
+                                   """)
+                                   .font(.system(size: 12, weight: .medium, design: .monospaced))
+                                   .padding(.vertical, 5)
+                                   
+                                   Text("This formula is sourced from the American Dietetic Association and remains a trusted standard in modern nutrition science.")
+                                       .font(.body)
+                                   Link("Medical Health Today - What to know about basal metabolic rate", destination: URL(string: "https://www.medicalnewstoday.com/articles/basal-metabolic-rate")!)
+                                       .foregroundColor(.blue)
+                               }
+                               .padding(.vertical, 5)
 
                 Spacer()
             }

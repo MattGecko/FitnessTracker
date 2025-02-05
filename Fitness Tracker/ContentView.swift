@@ -4,48 +4,95 @@ import RevenueCatUI
 
 @main
 struct FitnessTrackerApp: App {
-    
-    
     var body: some Scene {
         WindowGroup {
-            ContentView() // This is where your ContentView is set as the root view
+            ContentView()
                 .presentPaywallIfNeeded(requiredEntitlementIdentifier: "PRO")
-            
         }
-        
     }
     
-    init(){
-        
+    init() {
         Purchases.logLevel = .debug
         Purchases.configure(withAPIKey: "appl_lLUTDjrcfeuWHRNqGYxfwIfOHTb")
-        
-           
     }
-    
-    
 }
-    
-
-
 
 struct ContentView: View {
     @StateObject var userSettings = UserSettings()
+    @State private var isExpanded = false // Controls the radial menu expansion
+    @State private var selectedTab = 0 // Tracks active tab
 
     var body: some View {
-        TabView {
-            ProfileView(userSettings: userSettings)
-                .tabItem {
-                    Label("Profile", systemImage: "person.fill")
+        ZStack {
+            VStack {
+                // Main Tab View without default bar
+                TabView(selection: $selectedTab) {
+                    ProfileView(userSettings: userSettings)
+                        .tag(0)
+                    
+                    MealTrackerView(userSettings: userSettings)
+                        .tag(1)
+
+                    FoodLogView(userSettings: userSettings)
+                        .tag(2)
                 }
-            MealTrackerView(userSettings: userSettings)
-                .tabItem {
-                    Label("Meals", systemImage: "fork.knife")
-                }
-            FoodLogView(userSettings: userSettings)
-                    .tabItem {
-                        Label("Food Log", systemImage: "calendar")
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never)) // Removes default tab bar
+                
+                // Custom Bottom Navigation Bar with Center + Button
+                HStack {
+                    Spacer()
+                    
+                    // Profile Tab Button
+                    Button(action: {
+                        selectedTab = 0
+                    }) {
+                        VStack {
+                            Image(systemName: "person.fill")
+                            Text("Profile")
+                        }
                     }
+                    .foregroundColor(selectedTab == 0 ? .blue : .gray)
+                    
+                    Spacer()
+                    
+                    // Center + Button (Controls Radial Menu)
+                    Button(action: {
+                        withAnimation {
+                            isExpanded.toggle()
+                        }
+                    }) {
+                        Image(systemName: isExpanded ? "xmark.circle.fill" : "plus.circle.fill")
+                            .resizable()
+                            .frame(width: 50, height: 50)
+                            .foregroundColor(.blue)
+                            .background(Circle().fill(Color.white))
+                            .shadow(radius: 4)
+                    }
+                    .padding(.bottom, 10)
+
+                    Spacer()
+                    
+                    // Food Log Tab Button
+                    Button(action: {
+                        selectedTab = 2
+                    }) {
+                        VStack {
+                            Image(systemName: "calendar")
+                            Text("Food Log")
+                        }
+                    }
+                    .foregroundColor(selectedTab == 2 ? .blue : .gray)
+                    
+                    Spacer()
+                }
+                .padding(.top, 5)
+                .frame(height: 60)
+                .background(Color(UIColor.systemGray6))
+                .overlay(
+                    // Radial menu expands here
+                    RadialMenuView(isExpanded: $isExpanded)
+                )
+            }
         }
         .onAppear {
             checkAndInitializeData()
@@ -53,16 +100,8 @@ struct ContentView: View {
     }
 
     private func checkAndInitializeData() {
-        // Check and create UserData.json file if it does not exist when ContentView is displayed
         if DataManager.shared.loadData() == nil {
-            // Optionally, provide default data for the file
             DataManager.shared.createUserDataFile()
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }
